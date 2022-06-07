@@ -20,4 +20,7 @@ public class ContenuDto {
     @NotNull
     @NotEmpty
     private String contenu;
+
+    @NotNull
+    private Integer ordering;
 }

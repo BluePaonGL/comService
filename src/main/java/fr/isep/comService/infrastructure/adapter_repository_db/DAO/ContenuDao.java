@@ -25,9 +25,10 @@ public class ContenuDao {
     private String contenuId;
     private String contenuType;
     private String contenu;
+    private Integer ordering;
 
-    @ManyToMany(mappedBy = "contenuDaoSet")
-    Set<ArticleDao> articleDaoSet = new HashSet<>();
+    @OneToMany(mappedBy = "contenuDao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    Set<ArticleContenuDao> key;
 
     @Override
     public boolean equals(Object o) {

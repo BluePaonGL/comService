@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ContenuRepositoryPort {
     Contenu findById(String contenuId);
-    Contenu findByContenuType(String type);
+    List<Contenu> findByContenuType(String type);
 
     Contenu saveContenu(Contenu contenu);
     List<Contenu> findAll();

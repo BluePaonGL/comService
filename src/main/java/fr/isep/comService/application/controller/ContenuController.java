@@ -38,8 +38,10 @@ public class ContenuController {
         return new ResponseEntity<>(this.contenuServicePort.getContenuById(contenuId), HttpStatus.OK);
     }
 
+
+    //TODO return list
     @GetMapping("/bytype/{contenuType}")
-    public ResponseEntity<Contenu> getContenuByContenuType(@PathVariable String contenuType){
+    public ResponseEntity<List<Contenu>> getContenuByContenuType(@PathVariable String contenuType){
         return new ResponseEntity<>(this.contenuServicePort.getContenuByContenuType(contenuType), HttpStatus.OK);
     }
 

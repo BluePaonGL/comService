@@ -7,6 +7,7 @@ import fr.isep.comService.infrastructure.adapter_repository_db.DAO.ContenuDao;
 import fr.isep.comService.infrastructure.adapter_repository_db.repository.ContenuRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,13 +31,11 @@ public class ContenuRepositoryAdapter implements ContenuRepositoryPort {
     }
 
     @Override
-    public Contenu findByContenuType(String contenuType){
-        ContenuDao contenuDao = this.contenuRepository.findByContenuType(contenuType);
-        try{
-            return this.modelMapper.map(contenuDao, Contenu.class);
-        } catch (IllegalArgumentException exception){
-            throw new IllegalArgumentException("This content type does not exist in the database", exception);
-        }
+    public List<Contenu> findByContenuType(String contenuType){
+        return this.contenuRepository.findAll(Sort.by(Sort.Direction.ASC, "ordering"))
+                .stream().filter(contenuDao -> contenuDao.getContenuType().contains(contenuType))
+                .map(contenuDao -> this.modelMapper.map(contenuDao, Contenu.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -47,7 +46,7 @@ public class ContenuRepositoryAdapter implements ContenuRepositoryPort {
 
     @Override
     public List<Contenu> findAll(){
-        return this.contenuRepository.findAll()
+        return this.contenuRepository.findAll(Sort.by(Sort.Direction.ASC, "ordering"))
                 .stream().map(contenuDao -> this.modelMapper.map(contenuDao, Contenu.class))
                 .collect(Collectors.toList());
     }

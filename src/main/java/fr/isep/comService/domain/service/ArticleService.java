@@ -3,7 +3,10 @@ package fr.isep.comService.domain.service;
 import fr.isep.comService.application.DTO.ArticleDto;
 import fr.isep.comService.application.port.ArticleServicePort;
 import fr.isep.comService.domain.model.Article;
+import fr.isep.comService.domain.model.Contenu;
 import fr.isep.comService.domain.port.ArticleRepositoryPort;
+import fr.isep.comService.domain.port.ContenuRepositoryPort;
+import fr.isep.comService.infrastructure.adapter_repository_db.DAO.ArticleContenuDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +20,7 @@ import java.util.List;
 public class ArticleService implements ArticleServicePort {
 
     private final ArticleRepositoryPort articleRepositoryPort;
+    private final ContenuRepositoryPort contenuRepositoryPort;
     private final ModelMapper modelMapper;
 
     @Override
@@ -25,7 +29,7 @@ public class ArticleService implements ArticleServicePort {
     }
 
     @Override
-    public Article getArticleByArticleTitle(String articleTitle) {
+    public List<Article> getArticleByArticleTitle(String articleTitle) {
         return this.articleRepositoryPort.findByArticleTitle(articleTitle);
     }
 
@@ -41,14 +45,21 @@ public class ArticleService implements ArticleServicePort {
     }
 
     @Override
-    public Article addContenuToArticle(String articleId, String contenuId) {
+    public ArticleContenuDao addContenuToArticle(String articleId, String contenuId) {
         Article article = this.articleRepositoryPort.findById(articleId);
-        return this.articleRepositoryPort.addContenuToArticle(article, contenuId);
+        Contenu contenu = this.contenuRepositoryPort.findById(contenuId);
+        return this.articleRepositoryPort.addContenuToArticle(article, contenu);
     }
 
     @Override
     public Article removeContenuFromArticle(String articleId, String contenuId) {
         Article article = this.articleRepositoryPort.findById(articleId);
-        return this.articleRepositoryPort.removeContenuFromArticle(article, contenuId);
+        Contenu contenu = this.contenuRepositoryPort.findById(contenuId);
+        return this.articleRepositoryPort.removeContenuFromArticle(article, contenu);
+    }
+
+    @Override
+    public List<Contenu> getContentsOfAnArticle(String articleId){
+        return this.articleRepositoryPort.getContentsOfAnArticle(articleId);
     }
 }

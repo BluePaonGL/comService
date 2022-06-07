@@ -26,7 +26,7 @@ public class ContenuService implements ContenuServicePort {
     }
 
     @Override
-    public Contenu getContenuByContenuType(String contenuType) {
+    public List<Contenu> getContenuByContenuType(String contenuType) {
         return this.contenuRepositoryPort.findByContenuType(contenuType);
     }
 

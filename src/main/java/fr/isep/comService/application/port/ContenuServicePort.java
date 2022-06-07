@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ContenuServicePort {
     Contenu getContenuById(String contenuId);
-    Contenu getContenuByContenuType(String contenuType);
+    List<Contenu> getContenuByContenuType(String contenuType);
 
     Contenu saveContenu(ContenuDto contenuDto);
 

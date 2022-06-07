@@ -3,6 +3,8 @@ package fr.isep.comService.application.controller;
 import fr.isep.comService.application.DTO.ArticleDto;
 import fr.isep.comService.application.port.ArticleServicePort;
 import fr.isep.comService.domain.model.Article;
+import fr.isep.comService.domain.model.Contenu;
+import fr.isep.comService.infrastructure.adapter_repository_db.DAO.ArticleContenuDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,18 +39,24 @@ public class ArticleController {
         return new ResponseEntity<>(this.articleServicePort.getArticleById(articleId), HttpStatus.OK);
     }
 
+    //TODO return list ?
     @GetMapping("/bytitle/{articleTitle}")
-    public ResponseEntity<Article> getArticleByArticleTitle(@PathVariable String articleTitle){
+    public ResponseEntity<List<Article>> getArticleByArticleTitle(@PathVariable String articleTitle){
         return new ResponseEntity<>(this.articleServicePort.getArticleByArticleTitle(articleTitle), HttpStatus.OK);
     }
 
     @PostMapping("/{articleId}/add/{contenuId}")
-    public ResponseEntity<Article> addContenuToArticle(@PathVariable String articleId, @PathVariable String contenuId){
+    public ResponseEntity<ArticleContenuDao> addContenuToArticle(@PathVariable String articleId, @PathVariable String contenuId){
         return ResponseEntity.ok(this.articleServicePort.addContenuToArticle(articleId, contenuId));
     }
 
-    @PostMapping("/{articleId}/remove/{contenuId}")
+    @DeleteMapping("/{articleId}/remove/{contenuId}")
     public ResponseEntity<Article> removeContenuFromArticle(@PathVariable String articleId, @PathVariable String contenuId){
         return ResponseEntity.ok(this.articleServicePort.removeContenuFromArticle(articleId, contenuId));
+    }
+
+    @GetMapping("/{articleId}")
+    public ResponseEntity<List<Contenu>> getContentsOfAnArticle(@PathVariable String articleId){
+        return new ResponseEntity<>(this.articleServicePort.getContentsOfAnArticle(articleId), HttpStatus.OK);
     }
 }
