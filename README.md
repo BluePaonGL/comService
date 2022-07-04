@@ -10,4 +10,4 @@ Since this is a REST API, no installation is needed.
 ## Usage
 
 You can find the OpenApi specification of the application at the following link :
-[Swagger](https://user-service.cubetech-app.fr/swagger-ui/index.html)
+[Swagger](https://app.swaggerhub.com/apis-docs/ZANIKO45/swagger-com_service_open_api_3_0/1.0.0)
