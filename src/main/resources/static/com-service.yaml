@@ -1,0 +1,284 @@
+openapi: 3.0.2
+info:
+  title: Swagger ComService - OpenApi 3.0
+  description: |
+    This is the documentation for the ComService API of the IsHelp application.
+    We tried a microservices approach and this Service serves as the link between our frontends and Keycloak.
+    This API is designed and documented following the OpenApi specifications.
+  contact:
+    email: antoine.morin@eleve.isep.fr
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+tags:
+  - name: Article
+    description: Every operation about articles
+  - name: Contenu
+    description: Everything related to an article's content
+paths:
+  /article/create:
+    post:
+      tags:
+        - Article
+      summary: Create a new article
+      description: Create a new article and save it in Postgres.
+      operationId: createArticle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleReturned'
+        '400':
+          description: Invalid request body
+  /article/all:
+    get:
+      tags:
+        - Article
+      summary: Get list of all articles
+      description: Return an array with every article created
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleReturned'
+  /article/byid/{articleId}:
+    get:
+      tags:
+        - Article
+      summary: Get an article by id
+      description: Return an article by articleId search
+      parameters:
+        - name: articleId
+          in: path
+          description: articleId of the article you're trying to get
+          required: true
+          schema:
+            type: string
+            example: 2c948a85813e889201813e8944130000
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleReturned'
+  /article/bytitle/{articleTitle}:
+    get:
+      tags:
+        - Article
+      summary: Get a list of all articles with this title
+      description: Return an array of articles where articleTitle contains input
+      parameters:
+        - name: articleTitle
+          in: path
+          description: Title you're looking for
+          required: true
+          schema:
+            type: string
+            example: Title
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleReturned'
+                  
+  /contenu/create:
+    post:
+      tags:
+        - Contenu
+      summary: Create new content
+      description: Create a new content and save it in Postgres
+      operationId: createContenu
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contenu'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContenuReturned'
+        '400':
+          description: Invalid request body
+  /contenu/all:
+    get:
+      tags:
+        - Contenu
+      summary: Get list of all contents
+      description: Return an array with every content created
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContenuReturned'
+  /contenu/byid/{contenuId}:
+    get:
+      tags:
+        - Contenu
+      summary: Get content by id
+      description: Return content by contenuId search
+      parameters:
+        - name: contenuId
+          in: path
+          description: contenuId of the content you're trying to get
+          required: true
+          schema:
+            type: string
+            example: 2c948a85813e889201813e8944130000
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContenuReturned'
+  /contenu/bytype/{contenuType}:
+    get:
+      tags:
+        - Contenu
+      summary: Get a list of all content with this type
+      description: Return an array of content where contenuType contains input
+      parameters:
+        - name: contenuType
+          in: path
+          description: Type of content you're looking for
+          required: true
+          schema:
+            type: string
+            example: text
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContenuReturned'
+                
+  /article/{articleId}/add/{contenuId}:
+    post:
+      tags:
+        - Article
+        - Contenu
+      summary: Add a content to an article
+      description: Associate given content to given article
+      parameters:
+        - name: articleId
+          in: path
+          description: Id of the article
+          required: true
+          schema:
+            type: string
+            example: 2c948a85813e889201813e8944130000
+        - name: contenuId
+          in: path
+          description: Id of the contenu
+          required: true
+          schema:
+            type: string
+            example: 2c948a85813e889201813e8945454567
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleReturned'
+  /article/{articleId}/remove/{contenuId}:
+    delete:
+      tags:
+        - Article
+        - Contenu
+      summary: Delete a content of an article
+      description: Delete the association between given content and given article
+      parameters:
+        - name: articleId
+          in: path
+          description: Id of the article
+          required: true
+          schema:
+            type: string
+            example: 2c948a85813e889201813e8944130000
+        - name: contenuId
+          in: path
+          description: Id of the contenu
+          required: true
+          schema:
+            type: string
+            example: 2c948a85813e889201813e8945454567
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleReturned'
+      
+  
+components:
+  schemas:
+    Article:
+      type: object
+      required:
+        - articleTitle
+      properties:
+        articleTitle:
+          type: string
+          example: Title of article
+          
+    ArticleReturned:
+      properties:
+        articleId:
+          type: string
+          example: 2c948a85813e889201813e8944130000
+      allOf:
+        - $ref: '#/components/schemas/Article'
+        
+    Contenu:
+      type: object
+      required:
+        - contenuType
+        - contenu
+      properties:
+        contenuType:
+          type: string
+          example: text
+        contenu:
+          type: string
+          example: lorem ipsum
+        ordering:
+          type: integer
+          
+    ContenuReturned:
+      properties:
+        contenuId:
+          type: string
+          example: 2c948a85813e889201813e8944130000
+      allOf:
+        - $ref: '#/components/schemas/Contenu'
